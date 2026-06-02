@@ -1,0 +1,183 @@
+{
+  "version": "1.0.0",
+  "attribution": {
+    "aggregator": "principles.design",
+    "aggregatorUrl": "https://principles.design/",
+    "note": "All principles are quoted from publicly available sources. Discovery via principles.design — a curated library of real-world design principles by Ben Holliday and contributors. This app is an educational tool with full attribution; please support the original source."
+  },
+  "collections": [
+    {
+      "id": "nhs",
+      "company": "NHS",
+      "title": {
+        "en": "NHS Design Principles",
+        "pl": "NHS — Zasady projektowe"
+      },
+      "description": {
+        "en": "The National Health Service's principles for designing services that people trust with their health.",
+        "pl": "Zasady projektowe brytyjskiej Narodowej Służby Zdrowia — dla usług, którym ludzie powierzają swoje zdrowie."
+      },
+      "sourceUrl": "https://service-manual.nhs.uk/design-system/design-principles",
+      "viaUrl": "https://principles.design/examples/nhs-design-principles",
+      "principles": [
+        {
+          "id": "nhs-1",
+          "title": "Put people at the heart of everything you do",
+          "description": "Design with compassion by understanding and respecting the needs of patients, family, carers, and staff. Learn about each person's emotional, physical and technical requirements."
+        },
+        {
+          "id": "nhs-2",
+          "title": "Design for the outcome",
+          "description": "Identify what success looks like by defining health, wellbeing, or measurable outcomes your work will impact. Ensure your efforts improve lives directly or indirectly."
+        },
+        {
+          "id": "nhs-3",
+          "title": "Be inclusive",
+          "description": "Create services accessible to everyone, regardless of physical, mental health, social, cultural or learning differences."
+        },
+        {
+          "id": "nhs-4",
+          "title": "Design for context",
+          "description": "Consider the complete service experience beyond your specific component, including infrastructure and processes. Understand how people's interactions begin and conclude."
+        },
+        {
+          "id": "nhs-5",
+          "title": "Design for trust",
+          "description": "Protect the NHS's trusted reputation by designing reliable and secure solutions that maintain public confidence."
+        },
+        {
+          "id": "nhs-6",
+          "title": "Test your assumptions",
+          "description": "Validate designs through real user testing and behavioral observation. Rely on evidence from subject experts and existing research rather than intuition."
+        },
+        {
+          "id": "nhs-7",
+          "title": "Make, learn, iterate",
+          "description": "Begin with small experiments using prototypes to build understanding. Test continuously and refine based on findings."
+        },
+        {
+          "id": "nhs-8",
+          "title": "Do the hard work to make it simple",
+          "description": "Invest effort in understanding complex healthcare challenges thoroughly. Avoid transferring that complexity to end users."
+        },
+        {
+          "id": "nhs-9",
+          "title": "Make things open. It makes things better",
+          "description": "Share learning and work transparently, showing accountability and confidence through honest design decision-making."
+        }
+      ]
+    },
+    {
+      "id": "govuk",
+      "company": "GOV.UK",
+      "title": {
+        "en": "GOV.UK Design Principles",
+        "pl": "GOV.UK — Zasady projektowe"
+      },
+      "description": {
+        "en": "The UK Government's foundational principles for building digital public services — pioneering work that shaped how governments design services worldwide.",
+        "pl": "Fundamentalne zasady projektowania cyfrowych usług publicznych — pionierska praca, która wpłynęła na to, jak rządy projektują usługi na całym świecie."
+      },
+      "sourceUrl": "https://www.gov.uk/guidance/government-design-principles",
+      "viaUrl": "https://principles.design/examples/gov-uk-design-principles",
+      "principles": [
+        {
+          "id": "govuk-1",
+          "title": "Start with user needs",
+          "description": "Service design begins by identifying user needs through research, data analysis, and user conversation rather than assumptions. Empathy for users is essential, recognizing that stated requests may differ from actual needs."
+        },
+        {
+          "id": "govuk-2",
+          "title": "Do less",
+          "description": "Government should focus exclusively on functions only government can perform. Reusable platforms, shared resources like APIs, and linking to others' work should be prioritized over reinventing solutions repeatedly."
+        },
+        {
+          "id": "govuk-3",
+          "title": "Design with data",
+          "description": "Real-world user behavior should inform decision-making rather than hunches. Analytics must be built-in, continuously active, and accessible. Data-driven iteration should continue after service launch through prototyping and user testing."
+        },
+        {
+          "id": "govuk-4",
+          "title": "Do the hard work to make it simple",
+          "description": "Creating simplicity in complex systems requires substantial effort beyond surface-level aesthetics. Challenging established practices and prioritizing user simplicity over tradition represents the appropriate design approach."
+        },
+        {
+          "id": "govuk-5",
+          "title": "Iterate. Then iterate again",
+          "description": "Building quality services involves starting small and iterating extensively. Releasing minimum viable products, testing with users, and moving through development stages while removing non-functional features reduces risk and converts failures into learning opportunities."
+        },
+        {
+          "id": "govuk-6",
+          "title": "This is for everyone",
+          "description": "Accessible, inclusive design benefits all users. Services must be legible and readable for the entire country, especially those who struggle most with technology adoption and web navigation."
+        },
+        {
+          "id": "govuk-7",
+          "title": "Understand context",
+          "description": "Design should account for how users access services across different environments, devices, and familiarity levels, whether libraries, phones, or unfamiliar platforms like social media or the web itself."
+        },
+        {
+          "id": "govuk-8",
+          "title": "Build digital services, not websites",
+          "description": "Services solve user problems through integrated digital and real-world experiences. The focus extends beyond web pages to encompass all service aspects that collectively address genuine user needs."
+        },
+        {
+          "id": "govuk-9",
+          "title": "Be consistent, not uniform",
+          "description": "Consistent language and design patterns should be used broadly while allowing flexibility for different circumstances. Sharing successful patterns encourages improvement without restricting innovation or responsiveness to evolving user needs."
+        },
+        {
+          "id": "govuk-10",
+          "title": "Make things open: it makes things better",
+          "description": "Sharing work — code, designs, ideas, and failures — with colleagues and the public strengthens services. Transparency invites scrutiny, identifies improvements, and honors the open-source community's contributions."
+        }
+      ]
+    },
+    {
+      "id": "monzo",
+      "company": "Monzo",
+      "title": {
+        "en": "Monzo Product Principles",
+        "pl": "Monzo — Zasady produktowe"
+      },
+      "description": {
+        "en": "Monzo's principles for building internal product platforms — a fintech taking developer experience and learning seriously.",
+        "pl": "Zasady Monzo dla wewnętrznych platform produktowych — fintechu, który traktuje developer experience i naukę serio."
+      },
+      "sourceUrl": "https://monzo.com/blog/",
+      "viaUrl": "https://principles.design/examples/monzo-product-principles",
+      "principles": [
+        {
+          "id": "monzo-1",
+          "title": "Care about our platform contributors",
+          "description": "Build extensible platforms that are inclusive and accessible to many contributors, focusing on technical solutions while maintaining strong developer experience."
+        },
+        {
+          "id": "monzo-2",
+          "title": "Optimise for learning with simple solutions",
+          "description": "Focus on building the simplest thing to generate data and knowledge for better decisions, using MVPs as Minimum Viable Prototypes to learn before investing in automation."
+        },
+        {
+          "id": "monzo-3",
+          "title": "Prove it",
+          "description": "Test and measure everything built with quantitative or qualitative data, building in data gathering capabilities from the start to prove the right thing was built."
+        },
+        {
+          "id": "monzo-4",
+          "title": "Teach, guide, and empower",
+          "description": "Design solutions that reduce mistakes and increase confidence, embedding training and customizing user experience automatically while allowing personalization."
+        },
+        {
+          "id": "monzo-5",
+          "title": "Let consistency and patterns build trust",
+          "description": "Build predictable products with high conceptual integrity that let users develop reliable mental models for intuitive navigation and confident action."
+        },
+        {
+          "id": "monzo-6",
+          "title": "Keep the big picture in mind",
+          "description": "Focus on outcomes and workflows rather than feature aggregation, ensuring holistic and consistent experiences that don't decrease usability through poor integration."
+        }
+      ]
+    }
+  ]
+}
