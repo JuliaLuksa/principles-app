@@ -68,6 +68,11 @@ function findPrinciple(id) {
   return null;
 }
 
+const CHEVRON = `<svg class="chevron" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const CHECK_CIRCLE = `<svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="36" cy="36" r="32" fill="currentColor" opacity="0.15"/><path d="M22 36l11 11 18-22" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const TARGET = `<svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="36" cy="36" r="32" stroke="currentColor" stroke-width="3.5" fill="none" opacity="0.3"/><circle cx="36" cy="36" r="20" stroke="currentColor" stroke-width="3.5" fill="none" opacity="0.6"/><circle cx="36" cy="36" r="8" fill="currentColor"/></svg>`;
+const LEAF = `<svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 58c0-24 16-44 44-44-2 28-18 44-44 44z" fill="currentColor" opacity="0.18" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 58l28-28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+
 function setLang(lang) {
   state.lang = lang;
   localStorage.setItem(LANG_KEY, lang);
@@ -115,39 +120,57 @@ function renderHome(root) {
   const streakLabel = state.streak.count === 1 ? tt('home.streakOne') : tt('home.streak');
 
   const sessionBlock = session.total === 0
-    ? `<div class="empty-state" style="padding: 40px 0;">
-         <div class="empty-state-emoji">🌿</div>
-         <h2>${tt('home.allDone')}</h2>
-         <p>${tt('home.allDoneSub')}</p>
-         <a class="btn-secondary" href="#/explore" style="text-decoration: none; text-align: center;">${tt('nav.explore')}</a>
-       </div>`
-    : `<div class="session-card">
-         <h2>${tt('home.todaysSession')}</h2>
-         <div class="session-counts">
-           <div><strong>${session.newCards.length}</strong>${tt('home.newCard')}</div>
-           <div><strong>${session.reviews.length}</strong>${tt('home.reviews')}</div>
+    ? `<div class="section">
+         <div class="list-group">
+           <div class="empty-state">
+             <div class="empty-state-icon">${LEAF}</div>
+             <h2>${tt('home.allDone')}</h2>
+             <p>${tt('home.allDoneSub')}</p>
+             <a class="btn-secondary" href="#/explore" style="text-decoration: none;">${tt('nav.explore')}</a>
+           </div>
          </div>
-         <button class="btn-primary" id="start-session">${tt('home.startDaily')}</button>
+       </div>`
+    : `<div class="section">
+         <div class="section-header">${tt('home.todaysSession')}</div>
+         <div class="list-group">
+           <div class="session-row">
+             <div class="session-counts">
+               <div><strong>${session.newCards.length}</strong><span class="label-after">${tt('home.newCard')}</span></div>
+               <div><strong>${session.reviews.length}</strong><span class="label-after">${tt('home.reviews')}</span></div>
+             </div>
+             <button class="btn-primary" id="start-session">${tt('home.startDaily')}</button>
+           </div>
+         </div>
        </div>`;
 
   root.innerHTML = `
-    <h1 class="home-greeting">${tt(greetingKey)}</h1>
-    <p class="home-tagline">${tt('tagline')}</p>
-    <div class="streak-card">
-      <div class="streak-number">${state.streak.count}</div>
-      <div class="streak-label">${streakLabel}</div>
+    <h1 class="large-title">${tt(greetingKey)}</h1>
+    <p class="large-title-subtitle">${tt('tagline')}</p>
+
+    <div class="section">
+      <div class="list-group">
+        <div class="streak-row">
+          <span class="streak-number">${state.streak.count}</span>
+          <span class="streak-label">${streakLabel}</span>
+        </div>
+      </div>
     </div>
+
     ${sessionBlock}
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-number">${s.learned}</div>
-        <div class="stat-label">${tt('home.totalLearned')}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">${s.total}</div>
-        <div class="stat-label">${tt('home.totalSeen')}</div>
+
+    <div class="section">
+      <div class="list-group">
+        <div class="list-row stat-row">
+          <div class="list-row-content"><span class="list-row-title">${tt('home.totalLearned')}</span></div>
+          <span class="stat-row-value">${s.learned}</span>
+        </div>
+        <div class="list-row stat-row">
+          <div class="list-row-content"><span class="list-row-title">${tt('home.totalSeen')}</span></div>
+          <span class="stat-row-value">${s.total}</span>
+        </div>
       </div>
     </div>
+
     <div class="attribution-footer">
       ${tt('attribution.via')} <a href="https://principles.design/" target="_blank" rel="noopener">principles.design</a> ${tt('attribution.and')}.
     </div>
@@ -170,10 +193,10 @@ function renderDaily(root) {
     if (state.session.total > 0) bumpStreak();
     root.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state-emoji">✓</div>
+        <div class="empty-state-icon">${CHECK_CIRCLE}</div>
         <h2>${tt('daily.sessionComplete')}</h2>
         <p>${tt('daily.sessionCompleteSub')}</p>
-        <a class="btn-primary" href="#/home" style="text-decoration: none; text-align: center;">${tt('daily.backHome')}</a>
+        <a class="btn-primary" href="#/home" style="text-decoration: none;">${tt('daily.backHome')}</a>
       </div>
     `;
     state.session = null;
@@ -196,7 +219,7 @@ function renderDaily(root) {
       <div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>
       <span>${left} ${tt('daily.cardsLeft')}</span>
     </div>
-    <div class="card" id="flashcard">
+    <div class="card">
       <div class="card-company">${principle.collection.company}</div>
       <div class="card-title">${principle.title}</div>
       <div class="card-description hidden" id="card-desc">${principle.description}</div>
@@ -205,7 +228,9 @@ function renderDaily(root) {
         · ${tt('daily.via')} <a href="${principle.collection.viaUrl}" target="_blank" rel="noopener">principles.design</a>
       </div>
     </div>
-    <button class="btn-primary hidden" id="reveal-btn">${tt('daily.reveal')}</button>
+    <div class="reveal-wrap">
+      <button class="btn-primary" id="reveal-btn">${tt('daily.reveal')}</button>
+    </div>
     <div class="rating-buttons hidden" id="rating-btns">
       <button class="btn-again" data-rating="again">
         <span>${tt('daily.again')}</span>
@@ -220,11 +245,10 @@ function renderDaily(root) {
     </div>
   `;
 
-  document.getElementById('reveal-btn').classList.remove('hidden');
   document.getElementById('reveal-btn').addEventListener('click', () => {
     document.getElementById('card-desc').classList.remove('hidden');
     document.getElementById('card-source').classList.remove('hidden');
-    document.getElementById('reveal-btn').classList.add('hidden');
+    document.querySelector('.reveal-wrap').classList.add('hidden');
     document.getElementById('rating-btns').classList.remove('hidden');
   });
 
@@ -250,22 +274,32 @@ function renderDaily(root) {
 function renderExplore(root, params) {
   if (params[0]) return renderCollection(root, params[0]);
 
-  const cards = state.data.collections.map((c) => {
+  const rows = state.data.collections.map((c) => {
     const seen = c.principles.filter((p) => state.progress[p.id]);
     const learned = seen.filter((p) => isLearned(state.progress[p.id])).length;
+    const learningTxt = seen.length > 0 ? ` · ${seen.length} ${tt('explore.learning')}` : '';
+    const learnedTxt = learned > 0 ? ` · ${learned} ${tt('explore.learned')}` : '';
     return `
-      <a class="collection-card" href="#/explore/${c.id}" style="text-decoration: none; display: block;">
-        <div class="collection-company">${c.company}</div>
-        <div class="collection-title">${localized(c.title)}</div>
-        <div class="collection-meta">${c.principles.length} ${tt('explore.principles')} · ${seen.length} ${tt('explore.learning')} · ${learned} ${tt('explore.learned')}</div>
+      <a class="collection-row" href="#/explore/${c.id}">
+        <div class="collection-content">
+          <div class="collection-title">${localized(c.title)}</div>
+          <div class="collection-meta">${c.company} · ${c.principles.length} ${tt('explore.principles')}${learningTxt}${learnedTxt}</div>
+        </div>
+        ${CHEVRON}
       </a>
     `;
   }).join('');
 
   root.innerHTML = `
-    <h1 class="section-title">${tt('explore.title')}</h1>
-    <p class="section-subtitle">${tt('explore.subtitle')}</p>
-    ${cards}
+    <h1 class="large-title">${tt('explore.title')}</h1>
+    <p class="large-title-subtitle">${tt('explore.subtitle')}</p>
+
+    <div class="section">
+      <div class="list-group">
+        ${rows}
+      </div>
+    </div>
+
     <div class="attribution-footer">
       ${tt('attribution.via')} <a href="https://principles.design/" target="_blank" rel="noopener">principles.design</a>.
     </div>
@@ -279,13 +313,13 @@ function renderCollection(root, collectionId) {
   const items = c.principles.map((p) => {
     const inProgress = !!state.progress[p.id];
     const learned = inProgress && isLearned(state.progress[p.id]);
-    const status = learned ? `<span class="principle-status learned">${tt('explore.learned')}</span>` : (inProgress ? `<span class="principle-status">${tt('explore.learning')}</span>` : '');
+    const status = learned ? `<span class="principle-status learned">${tt('explore.learned')}</span>` : (inProgress ? `<span class="principle-status">${tt('explore.learning')}</span>` : '<span></span>');
     return `
       <div class="principle-item">
         <div class="principle-item-title">${p.title}</div>
         <div class="principle-item-desc">${p.description}</div>
         <div class="principle-actions">
-          ${status || '<span></span>'}
+          ${status}
           <button class="toggle-pill ${inProgress ? 'active' : ''}" data-toggle="${p.id}">
             ${inProgress ? tt('explore.added') : tt('explore.add')}
           </button>
@@ -295,15 +329,21 @@ function renderCollection(root, collectionId) {
   }).join('');
 
   root.innerHTML = `
-    <a class="back-btn" href="#/explore">← ${tt('nav.explore')}</a>
-    <h1 class="section-title">${localized(c.title)}</h1>
-    <p class="section-subtitle">${localized(c.description)}</p>
-    <div class="collection-detail">
-      ${items}
+    <a class="back-btn" href="#/explore">${tt('nav.explore')}</a>
+    <h1 class="large-title">${localized(c.title)}</h1>
+    <p class="large-title-subtitle">${localized(c.description)}</p>
+
+    <div class="section collection-detail">
+      <div class="list-group">
+        ${items}
+      </div>
     </div>
-    <div class="attribution-footer">
-      <a href="${c.sourceUrl}" target="_blank" rel="noopener">${tt('explore.readSource')} →</a><br/>
-      ${tt('explore.viaPrinciples')}: <a href="${c.viaUrl}" target="_blank" rel="noopener">${c.viaUrl.replace('https://', '')}</a>
+
+    <div class="section">
+      <div class="section-footer">
+        <a href="${c.sourceUrl}" target="_blank" rel="noopener">${tt('explore.readSource')} →</a><br/>
+        ${tt('explore.viaPrinciples')}: <a href="${c.viaUrl}" target="_blank" rel="noopener">principles.design</a>
+      </div>
     </div>
   `;
 
@@ -325,10 +365,12 @@ function renderCollection(root, collectionId) {
 function renderQuiz(root) {
   if (!state.quiz) {
     root.innerHTML = `
-      <h1 class="section-title">${tt('quiz.title')}</h1>
-      <p class="section-subtitle">${tt('quiz.subtitle')}</p>
-      <button class="btn-primary" id="start-quiz">${tt('quiz.start')}</button>
-      <div class="attribution-footer">
+      <h1 class="large-title">${tt('quiz.title')}</h1>
+      <p class="large-title-subtitle">${tt('quiz.subtitle')}</p>
+      <div class="quiz-actions" style="padding: 20px 16px 0;">
+        <button class="btn-primary" id="start-quiz">${tt('quiz.start')}</button>
+      </div>
+      <div class="attribution-footer" style="margin-top: 24px;">
         ${tt('attribution.via')} <a href="https://principles.design/" target="_blank" rel="noopener">principles.design</a>.
       </div>
     `;
@@ -342,11 +384,11 @@ function renderQuiz(root) {
   if (state.quiz.done) {
     root.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state-emoji">🎯</div>
+        <div class="empty-state-icon">${TARGET}</div>
         <h2>${tt('quiz.yourScore')}</h2>
-        <p style="font-family: var(--font-serif); font-size: 48px; color: var(--text); margin: 8px 0 24px;">${state.quiz.score} / ${state.quiz.questions.length}</p>
+        <div class="score-display">${state.quiz.score} <span class="score-divider">/</span> ${state.quiz.questions.length}</div>
         <button class="btn-primary" id="restart-quiz">${tt('quiz.tryAgain')}</button>
-        <a class="btn-secondary" href="#/home" style="text-decoration: none; text-align: center; margin-top: 10px;">${tt('quiz.backHome')}</a>
+        <a class="btn-secondary" href="#/home" style="text-decoration: none;">${tt('quiz.backHome')}</a>
       </div>
     `;
     document.getElementById('restart-quiz').addEventListener('click', () => {
@@ -369,7 +411,9 @@ function renderQuiz(root) {
       ${q.options.map((opt, i) => `<button class="quiz-option" data-opt="${i}">${opt}</button>`).join('')}
     </div>
     <div class="quiz-feedback hidden" id="quiz-feedback"></div>
-    <button class="btn-primary hidden" id="quiz-next" style="margin-top: 16px;">${state.quiz.idx === state.quiz.questions.length - 1 ? tt('quiz.finish') : tt('quiz.next')}</button>
+    <div class="quiz-actions hidden" id="quiz-next-wrap" style="padding: 20px 16px 0;">
+      <button class="btn-primary" id="quiz-next">${state.quiz.idx === state.quiz.questions.length - 1 ? tt('quiz.finish') : tt('quiz.next')}</button>
+    </div>
   `;
 
   document.querySelectorAll('[data-opt]').forEach((btn) => {
@@ -386,7 +430,7 @@ function renderQuiz(root) {
       feedback.classList.remove('hidden');
       feedback.textContent = isCorrect ? `✓ ${tt('quiz.correct')}` : `✗ ${tt('quiz.wasCorrect')}: ${q.answer}`;
       if (isCorrect) state.quiz.score += 1;
-      document.getElementById('quiz-next').classList.remove('hidden');
+      document.getElementById('quiz-next-wrap').classList.remove('hidden');
     });
   });
 
@@ -412,31 +456,44 @@ function buildQuiz() {
 /* SETTINGS */
 function renderSettings(root) {
   root.innerHTML = `
-    <h1 class="section-title">${tt('settings.title')}</h1>
+    <h1 class="large-title">${tt('settings.title')}</h1>
 
-    <div class="settings-section">
-      <h3>${tt('settings.language')}</h3>
-      <div class="settings-row" style="gap: 10px;">
-        <button class="toggle-pill ${state.lang === 'pl' ? 'active' : ''}" data-setlang="pl">${tt('settings.polish')}</button>
-        <button class="toggle-pill ${state.lang === 'en' ? 'active' : ''}" data-setlang="en">${tt('settings.english')}</button>
+    <div class="section">
+      <div class="section-header">${tt('settings.language')}</div>
+      <div class="list-group">
+        <div class="settings-row">
+          <span class="settings-label">${tt('settings.language')}</span>
+          <div class="settings-toggle">
+            <button class="${state.lang === 'pl' ? 'active' : ''}" data-setlang="pl">${tt('settings.polish')}</button>
+            <button class="${state.lang === 'en' ? 'active' : ''}" data-setlang="en">${tt('settings.english')}</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="settings-section">
-      <h3>${tt('settings.about')}</h3>
-      <p>${tt('settings.aboutBody')}</p>
-      <p style="margin-top: 12px;">
-        <a class="settings-link" href="https://principles.design/" target="_blank" rel="noopener">principles.design</a>
-      </p>
+    <div class="section">
+      <div class="section-header">${tt('settings.about')}</div>
+      <div class="list-group">
+        <div class="about-text">${tt('settings.aboutBody')}</div>
+        <a class="settings-row" href="https://principles.design/" target="_blank" rel="noopener" style="text-decoration: none;">
+          <span class="settings-label">principles.design</span>
+          <span class="list-row-trailing">↗</span>
+        </a>
+        <a class="settings-row" href="https://github.com/JuliaLuksa/principles-app" target="_blank" rel="noopener" style="text-decoration: none;">
+          <span class="settings-label">${tt('settings.sourceCode')}</span>
+          <span class="list-row-trailing">↗</span>
+        </a>
+        <div class="settings-row">
+          <span class="settings-label">${tt('settings.version')}</span>
+          <span class="settings-value">1.1</span>
+        </div>
+      </div>
     </div>
 
-    <div class="settings-section">
-      <h3>${tt('settings.resetProgress')}</h3>
-      <button class="btn-secondary" id="reset-btn" style="margin-top: 6px;">${tt('settings.resetProgress')}</button>
-    </div>
-
-    <div class="attribution-footer">
-      ${tt('settings.version')} 1.0 · <a href="https://principles.design/" target="_blank" rel="noopener">principles.design</a>
+    <div class="section">
+      <div class="list-group">
+        <button class="reset-row" id="reset-btn">${tt('settings.resetProgress')}</button>
+      </div>
     </div>
   `;
   document.querySelectorAll('[data-setlang]').forEach((btn) => {
@@ -470,7 +527,7 @@ async function init() {
     const res = await fetch('./data.json');
     state.data = await res.json();
   } catch (e) {
-    document.getElementById('view').innerHTML = `<p style="padding: 40px; color: var(--text-dim);">Failed to load principles data.</p>`;
+    document.getElementById('view').innerHTML = `<p style="padding: 40px; color: var(--label-secondary);">Failed to load principles data.</p>`;
     return;
   }
 
