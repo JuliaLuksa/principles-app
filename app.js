@@ -3,14 +3,26 @@ import { newCard, review, isDue, isLearned, buildSession, stats } from './srs.js
 
 const STORAGE_KEY = 'principles-app-v1';
 const LANG_KEY = 'principles-lang';
+const THEME_KEY = 'principles-theme';
 
 const state = {
   data: null,
   lang: localStorage.getItem(LANG_KEY) || (navigator.language?.startsWith('pl') ? 'pl' : 'en'),
+  theme: localStorage.getItem(THEME_KEY) || 'auto',
   progress: {},
   streak: { count: 0, lastDate: null },
   session: null
 };
+
+function applyTheme(theme) {
+  state.theme = theme;
+  localStorage.setItem(THEME_KEY, theme);
+  if (theme === 'auto') {
+    document.documentElement.removeAttribute('data-theme');
+  } else {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+}
 
 function loadState() {
   try {
@@ -468,6 +480,14 @@ function renderSettings(root) {
             <button class="${state.lang === 'en' ? 'active' : ''}" data-setlang="en">${tt('settings.english')}</button>
           </div>
         </div>
+        <div class="settings-row">
+          <span class="settings-label">${tt('settings.theme')}</span>
+          <div class="settings-toggle">
+            <button class="${state.theme === 'auto' ? 'active' : ''}" data-settheme="auto">${tt('settings.themeAuto')}</button>
+            <button class="${state.theme === 'light' ? 'active' : ''}" data-settheme="light">${tt('settings.themeLight')}</button>
+            <button class="${state.theme === 'dark' ? 'active' : ''}" data-settheme="dark">${tt('settings.themeDark')}</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -475,6 +495,10 @@ function renderSettings(root) {
       <div class="section-header">${tt('settings.about')}</div>
       <div class="list-group">
         <div class="about-text">${tt('settings.aboutBody')}</div>
+        <a class="settings-row" href="https://github.com/JuliaLuksa" target="_blank" rel="noopener" style="text-decoration: none;">
+          <span class="settings-label">${tt('settings.createdBy')}</span>
+          <span class="list-row-trailing"><span style="color: var(--tint); font-weight: 500;">Julia Łuksa</span> ↗</span>
+        </a>
         <a class="settings-row" href="https://principles.design/" target="_blank" rel="noopener" style="text-decoration: none;">
           <span class="settings-label">principles.design</span>
           <span class="list-row-trailing">↗</span>
@@ -485,7 +509,7 @@ function renderSettings(root) {
         </a>
         <div class="settings-row">
           <span class="settings-label">${tt('settings.version')}</span>
-          <span class="settings-value">1.1</span>
+          <span class="settings-value">1.2</span>
         </div>
       </div>
     </div>
@@ -498,6 +522,9 @@ function renderSettings(root) {
   `;
   document.querySelectorAll('[data-setlang]').forEach((btn) => {
     btn.addEventListener('click', () => setLang(btn.dataset.setlang));
+  });
+  document.querySelectorAll('[data-settheme]').forEach((btn) => {
+    btn.addEventListener('click', () => { applyTheme(btn.dataset.settheme); render(); });
   });
   document.getElementById('reset-btn').addEventListener('click', () => {
     if (confirm(tt('settings.resetConfirm'))) {
@@ -514,6 +541,7 @@ function renderSettings(root) {
 /* INIT */
 async function init() {
   loadState();
+  applyTheme(state.theme);
   document.documentElement.lang = state.lang;
   document.getElementById('lang-pl').setAttribute('aria-pressed', String(state.lang === 'pl'));
   document.getElementById('lang-en').setAttribute('aria-pressed', String(state.lang === 'en'));
