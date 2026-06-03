@@ -1,11 +1,11 @@
 {
   "name": "Principles — Learn Design",
   "short_name": "Principles",
-  "description": "Daily flashcards for design principles, with spaced repetition. Curated from principles.design.",
+  "description": "Learn design principles as flashcards — 988 principles from 152 firms and authors, sourced from principles.design.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#fafaf7",
+  "background_color": "#f4f4f5",
   "theme_color": "#1a1a1a",
   "orientation": "portrait",
   "icons": [

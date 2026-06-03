@@ -1,81 +1,54 @@
-// Simplified SM-2 inspired spaced repetition.
-// Each card state: { id, interval (days), ease, reps, lapses, due (ISO date), state ('new'|'learning'|'review') }
-
-const DAY = 24 * 60 * 60 * 1000;
-const MIN_EASE = 1.3;
-const DEFAULT_EASE = 2.5;
+// Pure flashcard mode. No spaced repetition scheduling — user controls the pace.
+// Mastery levels per card:
+//   0 = unseen
+//   1 = learning (rated "again", will repeat in session)
+//   2 = known   (rated "good")
+//   3 = mastered (rated "easy")
 
 export function newCard(id) {
-  return {
-    id,
-    interval: 0,
-    ease: DEFAULT_EASE,
-    reps: 0,
-    lapses: 0,
-    due: new Date().toISOString(),
-    state: 'new'
-  };
+  return { id, mastery: 0, timesSeen: 0, lastSeen: null };
 }
 
 // rating: 'again' | 'good' | 'easy'
-export function review(card, rating, now = new Date()) {
+export function markCard(card, rating, now = new Date()) {
   const next = { ...card };
-  next.reps += 1;
-
-  if (rating === 'again') {
-    next.lapses += 1;
-    next.ease = Math.max(MIN_EASE, next.ease - 0.2);
-    next.interval = 0;
-    next.state = 'learning';
-    next.due = new Date(now.getTime() + 60 * 1000).toISOString();
-    return next;
-  }
-
-  if (next.state === 'new' || next.state === 'learning') {
-    if (rating === 'good') {
-      next.interval = next.interval === 0 ? 1 : 3;
-    } else {
-      next.interval = 4;
-    }
-    next.state = 'review';
-  } else {
-    // review state — graduate
-    if (rating === 'good') {
-      next.interval = Math.round(next.interval * next.ease);
-    } else {
-      next.ease += 0.15;
-      next.interval = Math.round(next.interval * next.ease * 1.3);
-    }
-  }
-
-  next.due = new Date(now.getTime() + next.interval * DAY).toISOString();
+  next.timesSeen += 1;
+  next.lastSeen = now.toISOString();
+  if (rating === 'again') next.mastery = 1;
+  else if (rating === 'good') next.mastery = Math.max(next.mastery, 2);
+  else if (rating === 'easy') next.mastery = 3;
   return next;
 }
 
-export function isDue(card, now = new Date()) {
-  return new Date(card.due) <= now;
+export function isMastered(card) { return card.mastery === 3; }
+export function isLearning(card) { return card.mastery === 1; }
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
 
-export function isLearned(card) {
-  return card.state === 'review' && card.interval >= 7;
+// Build a flashcard session for a collection (or all collections if collectionId === 'mix').
+// Returns: { queue: [{ id, mastery, ... }], total }
+export function buildSession(progress, principleIds, opts = {}) {
+  const { shuffleOrder = true } = opts;
+  const cards = principleIds.map((id) => progress[id] || newCard(id));
+  const ordered = shuffleOrder ? shuffle(cards) : cards;
+  return { queue: ordered, total: ordered.length };
 }
 
-// Build today's session: up to N new cards + all due reviews, ordered: reviews first, then new.
-export function buildSession(progress, allPrincipleIds, opts = {}) {
-  const { maxNew = 1, maxReviews = 20, now = new Date() } = opts;
-  const cards = Object.values(progress);
-  const reviews = cards.filter((c) => c.state !== 'new' && isDue(c, now)).slice(0, maxReviews);
-  const seenIds = new Set(cards.map((c) => c.id));
-  const newPool = allPrincipleIds.filter((id) => !seenIds.has(id)).slice(0, maxNew);
-  const newCards = newPool.map((id) => newCard(id));
-  return { reviews, newCards, total: reviews.length + newCards.length };
-}
-
-export function stats(progress) {
-  const cards = Object.values(progress);
+export function stats(progress, scopeIds) {
+  const ids = scopeIds || Object.keys(progress);
+  const cards = ids.map((id) => progress[id]).filter(Boolean);
   return {
-    total: cards.length,
-    learned: cards.filter(isLearned).length,
-    learning: cards.filter((c) => c.state === 'learning' || (c.state === 'review' && c.interval < 7)).length
+    total: ids.length,
+    seen: cards.length,
+    learning: cards.filter(isLearning).length,
+    known: cards.filter((c) => c.mastery === 2).length,
+    mastered: cards.filter(isMastered).length
   };
 }
